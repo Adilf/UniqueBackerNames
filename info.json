@@ -1,0 +1,10 @@
+{
+  "name": "UniqueBackerNames",
+  "version": "0.1.0",
+  "title": "Unique backer names",
+  "author": "Adil",
+  "contact": "",
+  "homepage": "",
+  "description": "utility mod which guarantees backer name to be unique per entity type",
+  "dependencies": ["base >= 0.12.0"]
+}

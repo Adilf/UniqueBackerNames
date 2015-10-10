@@ -1,0 +1,37 @@
+This mod provides a couple of functions to append unique number to the end of an entity backer name in a following format #number#.
+    The format was chosen with the idea that it's uncommon for people to normally use such and thus collisions could be avoided.
+The primary intent of usage is allowing storing locomotives in tables indexed by the backer_name.
+The functions may be used on entity of any arbitrary type, however, for immobile entities it may be
+    better to use their position as identifier in table.
+The mod functions don't check whether the entity has a backer name. Reasons are
+    These functions are intended to be used in cases when modder has already performed typecheck.
+    The resulting runtime error, doesn't result in game stop, only in console crap message.
+    
+To use the functionality:
+
+1. Your mod must list UniqueBackerNames in it's dependencies. e.g. "dependencies": ["base >= 0.12.0","UniqueBackerNames"]
+
+2a. If you are making mod that renames things, use the "rename" function to provide compatibility with other mods:
+    remote.call("UniqueBackerNames","rename",entity_to_rename,new_name)
+    
+2b. If you're making mod with backername indexed tables:
+Whenever you want to make a table entry with backer name as a key, you should first invoke "make_unique" function on the entity:
+
+game.on_event({defines.events.on_built_entity,defines.events.on_robot_built_entity},
+    function(event)
+        if event.created_entity.type=='locomotive' then
+            remote.call("UniqueBackerNames","make_unique",event.created_entity)--this is the addition to normal code
+            global.my_table[event.created_entity.backer_name]=event.created_entity
+        end
+    end)
+
+3. To make sure that your data structures aren't distorted by renaming (if that's done responsibly) you need to subscribe handler
+to custom event (in mod's code it's called on_rename):
+
+game.on_event(remote.call("UniqueBackerNames",'on_rename_event'),
+    function(event)
+        if event.entity.type=='locomotive" then 
+            global.my_table[event.entity.backer_name]=global.my_table[event.old_name]
+            global.my_table[event.old_name]=nil
+        end
+    end)

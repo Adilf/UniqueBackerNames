@@ -17,7 +17,7 @@ To use the functionality:
 2b. If you're making mod with backername indexed tables:
 Whenever you want to make a table entry with backer name as a key, you should first invoke "make_unique" function on the entity:
 
-game.on_event({defines.events.on_built_entity,defines.events.on_robot_built_entity},
+script.on_event({defines.events.on_built_entity,defines.events.on_robot_built_entity},
     function(event)
         if event.created_entity.type=='locomotive' then
             remote.call("UniqueBackerNames","make_unique",event.created_entity)--this is the addition to normal code
@@ -28,9 +28,9 @@ game.on_event({defines.events.on_built_entity,defines.events.on_robot_built_enti
 3. To make sure that your data structures aren't distorted by renaming (if that's done responsibly) you need to subscribe handler
 to custom event (in mod's code it's called on_rename):
 
-game.on_event(remote.call("UniqueBackerNames",'on_rename_event'),
+script.on_event(remote.call("UniqueBackerNames",'on_rename_event'),
     function(event)
-        if event.entity.type=='locomotive" then 
+        if event.entity.type=="locomotive" then 
             global.my_table[event.entity.backer_name]=global.my_table[event.old_name]
             global.my_table[event.old_name]=nil
         end

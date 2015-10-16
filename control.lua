@@ -1,7 +1,7 @@
 --this mod defines an interface with a couple of functions that should be used to 
 --guarantee that backer name is unique for the relevant type of entities
 
-local on_rename=game.generate_event_name();
+local on_rename=script.generate_event_name();
 --result is an event name: on_renamed
 --on_rename is the event, which is raised after rename function is invoked, it contains fields {entity,old_name}
 --which are self-explanatory, the purpose of this event is to let you update data structures in your mod
